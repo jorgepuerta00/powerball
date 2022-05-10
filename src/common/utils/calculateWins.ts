@@ -7,13 +7,14 @@ import { intersection } from "./intersection";
 export const calculateWins = (
   matchCount: number,
   doesPowerballMatch: boolean
-): number => {
+): any => {
   switch (matchCount) {
+    case 0: return doesPowerballMatch ? 4 : 0;
     case 1: return doesPowerballMatch ? 4 : 0;
     case 2: return doesPowerballMatch ? 7 : 0;
     case 3: return doesPowerballMatch ? 100 : 7;
     case 4: return doesPowerballMatch ? 50000 : 100;
-    case 5: return doesPowerballMatch ? 0 : 1000000;
+    case 5: return doesPowerballMatch ? 'Grand Prize' : 1000000;
     default: return 0;
   }
 };
@@ -21,10 +22,10 @@ export const calculateWins = (
 export const getPickWithWinnings = (pick: UserPickDTO, draw: DrawDTO): ResponsePick => {
   const matching = intersection(pick.numbers, draw.numbers);
   const matchCount = matching.size;
-  const doesPowerballMatch = pick.powerball === draw.powerball;
-  const isJackpot = matchCount === 5 && doesPowerballMatch;
+  const doesPowerballMatch = pick.powerball == draw.powerball;
+  const isJackpot = matchCount == 5 && doesPowerballMatch;
   const winnings = calculateWins(matchCount, doesPowerballMatch);
-  const isWinner = winnings > 0 || isJackpot;
+  const isWinner = winnings != '0' || isJackpot;
 
   return {
     numbers: [...pick.numbers],
